@@ -4,6 +4,7 @@
  */
 package br.com.ifba.curso.view.util; 
 
+import br.com.ifba.curso.view.CursoAtualizar;
 import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -62,16 +63,34 @@ public class ButtonEditor extends DefaultCellEditor {
      */
     @Override
     public Object getCellEditorValue() {
-        // LÓGICA DE TESTE SIMPLES:
-        // Verifica em qual coluna o clique ocorreu e mostra uma mensagem.
-        if (column == 4) { // Coluna "Editar"
-            JOptionPane.showMessageDialog(button, "Botão EDITAR clicado na linha: " + row);
+        // --- LÓGICA DE AÇÃO DENTRO DO EDITOR ---
+        
+        if (this.column == 4) { // Se for a coluna "Editar"
+            try {
+                // 1. Pega o ID da tabela usando a referência que guardamos
+                // Supondo que o ID está na primeira coluna (índice 0)
+                // Object valorId = this.table.getValueAt(this.row, 0);
+                // int idDoCurso = Integer.parseInt(valorId.toString());
+
+                // 2. INSTANCIA O OBJETO DA TELA DE EDIÇÃO AQUI DENTRO
+                CursoAtualizar telaEdicao = new CursoAtualizar();
+                telaEdicao.setVisible(true);
+
+            } catch (NumberFormatException e) {
+                JOptionPane.showMessageDialog(button, "Erro: O ID do curso na tabela não é um número válido.");
+            }
             
-        } else if (column == 5) { // Coluna "Remover"
-            JOptionPane.showMessageDialog(button, "Botão REMOVER clicado na linha: " + row);
+        } 
+        else if (this.column == 5) { // Se for a coluna "Remover"
+            // A lógica de remoção também pode ser colocada aqui
+            int resposta = JOptionPane.showConfirmDialog(button, "Deseja realmente remover a linha " + this.row + "?", "Confirmar Remoção", JOptionPane.YES_NO_OPTION);
+            if (resposta == JOptionPane.YES_OPTION) {
+                // Lógica para remover do banco...
+                System.out.println("Remoção confirmada para a linha: " + this.row);
+                // ((DefaultTableModel) this.table.getModel()).removeRow(this.row); // Isso removeria da tela
+            }
         }
         
-        // Retorna um valor qualquer, pois o botão não "salva" um valor na célula.
         return "";
     }
 }

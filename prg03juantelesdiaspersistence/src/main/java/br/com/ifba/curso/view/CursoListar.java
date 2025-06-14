@@ -215,6 +215,11 @@ public class CursoListar extends javax.swing.JFrame {
 
     private void btnAdicionaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAdicionaActionPerformed
         // TODO add your handling code here:
+        // 1. Cria uma nova instância (um novo objeto) da tela de cadastro
+        CursoCadastrar telaCadastro = new CursoCadastrar();
+
+        // 2. Torna essa nova tela visível para o usuário
+        telaCadastro.setVisible(true);
     }//GEN-LAST:event_btnAdicionaActionPerformed
 
     private void btnPesquisaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPesquisaActionPerformed
