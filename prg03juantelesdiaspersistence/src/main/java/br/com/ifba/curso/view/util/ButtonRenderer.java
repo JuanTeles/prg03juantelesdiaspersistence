@@ -38,12 +38,11 @@ public class ButtonRenderer extends JButton implements TableCellRenderer {
         }
     }
 
-    // --- MÉTODO AUXILIAR NOVO ---
     // Este método carrega uma imagem e a redimensiona para o tamanho especificado
     private ImageIcon scaleImage(String path, int size) {
         ImageIcon icon = new ImageIcon(getClass().getResource(path));
         Image img = icon.getImage();
-        // Image.SCALE_SMOOTH prioriza a qualidade da imagem redimensionada
+        
         Image scaledImg = img.getScaledInstance(size, size, Image.SCALE_SMOOTH);
         return new ImageIcon(scaledImg);
     }
@@ -52,9 +51,7 @@ public class ButtonRenderer extends JButton implements TableCellRenderer {
     public Component getTableCellRendererComponent(JTable table, Object value,
             boolean isSelected, boolean hasFocus, int row, int column) {
         
-        // Esta parte do código NÃO MUDA.
-        // Ela já vai usar os ícones redimensionados que foram preparados no construtor.
-
+        // Usa a cor de fundo padrão da tabela ou a de seleção
         if (isSelected) {
             setForeground(table.getSelectionForeground());
             setBackground(table.getSelectionBackground());
@@ -69,7 +66,7 @@ public class ButtonRenderer extends JButton implements TableCellRenderer {
             setIcon(deleteIcon);
         }
         
-        // Removemos o texto para exibir apenas o ícone
+        // Remove o texto para exibir apenas o ícone
         setText("");
 
         return this;

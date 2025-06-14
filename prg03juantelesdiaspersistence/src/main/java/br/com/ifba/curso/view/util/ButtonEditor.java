@@ -71,7 +71,7 @@ public class ButtonEditor extends DefaultCellEditor {
             JOptionPane.showMessageDialog(button, "Botão REMOVER clicado na linha: " + row);
         }
         
-        // Retorna um valor qualquer, pois nosso botão não "salva" um valor na célula.
+        // Retorna um valor qualquer, pois o botão não "salva" um valor na célula.
         return "";
     }
 }

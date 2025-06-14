@@ -18,7 +18,8 @@ public class CursoListar extends javax.swing.JFrame {
 
     /**
      * Creates new form CursoListar
-     */public CursoListar() {
+     */
+    public CursoListar() {
         initComponents();
         setLocationRelativeTo(null); // inicializa o jframe no meio da tela
         configurarTabela(); // Novo método para organizar
@@ -28,7 +29,7 @@ public class CursoListar extends javax.swing.JFrame {
             // Define o tamanho desejado para o ícone da lupa
             int iconSize = 20; // Ajuste o tamanho conforme o botão
 
-            // Usa nossa classe utilitária para carregar e redimensionar
+            // Usa um método para carregar e redimensionar a imagem dos botões
             ImageIcon searchIcon = scaleImage("/imagens/search.png", iconSize);
             ImageIcon addIcon = scaleImage("/imagens/add.png", iconSize);
 
@@ -36,7 +37,7 @@ public class CursoListar extends javax.swing.JFrame {
             btnPesquisa.setIcon(searchIcon);
             btnAdiciona.setIcon(addIcon);
 
-            // Opcional: remove o texto do botão para exibir apenas o ícone
+            // remove o texto do botão para exibir apenas o ícone
             btnPesquisa.setText("");
             btnAdiciona.setText("");
 
