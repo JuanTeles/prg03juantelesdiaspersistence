@@ -4,10 +4,10 @@
  */
 package br.com.ifba.curso.entity;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
 
 /**
@@ -20,9 +20,54 @@ import javax.persistence.Id;
 public class Curso {
 
     @Id // 2. Define que este atributo é a chave primária
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // Deixa o MySQL controlar a numeração (AUTO_INCREMENT)
+    @GeneratedValue(strategy = GenerationType.IDENTITY) // (AUTO_INCREMENT)
     private Long id;
 
-    // Não precisa de construtores, getters, setters ou outros atributos PARA ESTE TESTE.
+    private String codigo;
+    private String nome;
+    private int cargaHoraria;
+    private boolean ativo;
+    
     // O construtor padrão vazio é criado automaticamente.
+    
+    // Getters e Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(String codigo) {
+        this.codigo = codigo;
+    }
+    
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public int getCargaHoraria() {
+        return cargaHoraria;
+    }
+
+    public void setCargaHoraria(int cargaHoraria) {
+        this.cargaHoraria = cargaHoraria;
+    }
+
+    public boolean isAtivo() {
+        return ativo;
+    }
+
+    public void setAtivo(boolean ativo) {
+        this.ativo = ativo;
+    }
 }

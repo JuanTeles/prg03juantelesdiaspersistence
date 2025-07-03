@@ -23,6 +23,12 @@ public class ButtonRenderer extends JButton implements TableCellRenderer {
 
     public ButtonRenderer() {
         setOpaque(true);
+        
+        // --- CÓDIGO PARA DEIXAR O BOTÃO TRANSPARENTE ---
+        setContentAreaFilled(false); // 1. Não pinta a área de conteúdo (o fundo)
+        setBorderPainted(false);     // 2. Não pinta a borda
+        setFocusPainted(false);      // 3. (Opcional) Não pinta o efeito de foco ao clicar
+
 
         // Define o tamanho desejado para os ícones (ex: 32x32 pixels)
         // Deve ser um pouco menor que a altura da linha para ter uma margem.
