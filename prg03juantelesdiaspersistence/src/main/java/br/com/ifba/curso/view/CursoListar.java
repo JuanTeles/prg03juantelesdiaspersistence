@@ -4,9 +4,8 @@
  */
 package br.com.ifba.curso.view;
 
-import br.com.ifba.CursoDelete;
-import br.com.ifba.CursoFind;
-import br.com.ifba.CursoFindAll;
+import br.com.ifba.curso.dao.CursoDao;
+import br.com.ifba.curso.dao.CursoIDao;
 import br.com.ifba.curso.entity.Curso;
 import br.com.ifba.curso.view.util.ButtonRenderer;
 import java.awt.Image;
@@ -22,10 +21,8 @@ import javax.swing.table.DefaultTableModel;
 public class CursoListar extends javax.swing.JFrame {
     
     // Adiciona atributos para as classes de buscas
-    private final CursoFindAll buscador = new CursoFindAll();
-    private final CursoFind buscadorNome = new CursoFind();
     private List<Curso> listaDeCursos; // guarda a lista de cursos carregada
-    private final CursoDelete deletador = new CursoDelete();
+    private final CursoIDao cursoDao = new CursoDao();
     
     /**
      * Creates new form CursoListar
@@ -106,7 +103,7 @@ public class CursoListar extends javax.swing.JFrame {
                         if (resposta == JOptionPane.YES_NO_OPTION) {
                             try {
                                 // Usa o ID do objeto identificado corretamente
-                                deletador.deletar(cursoParaRemover.getId());
+                                cursoDao.delete(cursoParaRemover);
 
                                 // Mostra a mensagem de sucesso
                                 JOptionPane.showMessageDialog(CursoListar.this, "Curso removido com sucesso!");
@@ -142,7 +139,7 @@ public class CursoListar extends javax.swing.JFrame {
     public void carregarDados() {
         try {
             // Usa o buscador para obter a lista de cursos do banco
-            this.listaDeCursos = buscador.buscarTodos();
+            this.listaDeCursos = cursoDao.findAll();
 
             // Pega o modelo da tabela
             DefaultTableModel model = (DefaultTableModel) tblCursos.getModel();
@@ -330,7 +327,7 @@ public class CursoListar extends javax.swing.JFrame {
 
         try {
             // Usa o buscadorNome para consultar o banco com o texto digitado
-            this.listaDeCursos = buscadorNome.buscarPorNome(nomePesquisa);
+            this.listaDeCursos = cursoDao.findByName(nomePesquisa);
 
             // Pega o modelo da tabela
             DefaultTableModel model = (DefaultTableModel) tblCursos.getModel();

@@ -4,6 +4,7 @@
  */
 package br.com.ifba.curso.entity;
 
+import br.com.ifba.infrastructure.entity.PersistenceEntity;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -17,7 +18,7 @@ import jakarta.persistence.Id;
 
 
 @Entity // 1. Diz que esta classe é uma tabela
-public class Curso {
+public class Curso extends PersistenceEntity{
 
     @Id // 2. Define que este atributo é a chave primária
     @GeneratedValue(strategy = GenerationType.IDENTITY) // (AUTO_INCREMENT)
@@ -31,14 +32,6 @@ public class Curso {
     // O construtor padrão vazio é criado automaticamente.
     
     // Getters e Setters
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getCodigo() {
         return codigo;
     }
