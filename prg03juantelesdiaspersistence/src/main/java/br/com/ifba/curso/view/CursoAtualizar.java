@@ -4,6 +4,8 @@
  */
 package br.com.ifba.curso.view;
 
+import br.com.ifba.curso.controller.CursoController;
+import br.com.ifba.curso.controller.CursoIController;
 import br.com.ifba.curso.dao.CursoDao;
 import br.com.ifba.curso.dao.CursoIDao;
 import br.com.ifba.curso.entity.Curso;
@@ -171,8 +173,8 @@ public class CursoAtualizar extends javax.swing.JFrame {
                 cursoEditar.setAtivo(cbxAtivo.isSelected());
 
                 // Instancia sua classe de persistência e salva o objeto no banco
-                CursoIDao cursoDao = new CursoDao();
-                cursoDao.update(cursoEditar);
+                CursoIController cursoController = new CursoController();
+                cursoController.update(cursoEditar);
 
                 // Exibe uma mensagem de sucesso para o usuário
                 JOptionPane.showMessageDialog(this, "Curso atualizado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);

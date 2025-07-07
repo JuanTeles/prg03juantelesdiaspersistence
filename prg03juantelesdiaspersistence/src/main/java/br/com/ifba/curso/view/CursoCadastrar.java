@@ -4,6 +4,8 @@
  */
 package br.com.ifba.curso.view;
 
+import br.com.ifba.curso.controller.CursoController;
+import br.com.ifba.curso.controller.CursoIController;
 import br.com.ifba.curso.dao.CursoDao;
 import br.com.ifba.curso.dao.CursoIDao;
 import br.com.ifba.curso.entity.Curso;
@@ -158,8 +160,8 @@ public class CursoCadastrar extends javax.swing.JFrame {
                 novoCurso.setAtivo(cbxAtivo.isSelected());
 
                 // Instancia sua classe de persistência e salva o objeto no banco
-                CursoIDao cursoDao = new CursoDao();
-                cursoDao.save(novoCurso);
+                CursoIController cursoController = new CursoController();
+                cursoController.save(novoCurso);
 
                 // Exibe uma mensagem de sucesso para o usuário
                 JOptionPane.showMessageDialog(this, "Curso cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);

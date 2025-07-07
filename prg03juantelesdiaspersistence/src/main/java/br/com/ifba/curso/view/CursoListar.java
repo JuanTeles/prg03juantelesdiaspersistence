@@ -4,6 +4,8 @@
  */
 package br.com.ifba.curso.view;
 
+import br.com.ifba.curso.controller.CursoController;
+import br.com.ifba.curso.controller.CursoIController;
 import br.com.ifba.curso.dao.CursoDao;
 import br.com.ifba.curso.dao.CursoIDao;
 import br.com.ifba.curso.entity.Curso;
@@ -22,7 +24,7 @@ public class CursoListar extends javax.swing.JFrame {
     
     // Adiciona atributos para as classes de buscas
     private List<Curso> listaDeCursos; // guarda a lista de cursos carregada
-    private final CursoIDao cursoDao = new CursoDao();
+    private final CursoIController cursoController = new CursoController();
     
     /**
      * Creates new form CursoListar
@@ -103,7 +105,7 @@ public class CursoListar extends javax.swing.JFrame {
                         if (resposta == JOptionPane.YES_NO_OPTION) {
                             try {
                                 // Usa o ID do objeto identificado corretamente
-                                cursoDao.delete(cursoParaRemover);
+                                cursoController.delete(cursoParaRemover);
 
                                 // Mostra a mensagem de sucesso
                                 JOptionPane.showMessageDialog(CursoListar.this, "Curso removido com sucesso!");
@@ -139,7 +141,7 @@ public class CursoListar extends javax.swing.JFrame {
     public void carregarDados() {
         try {
             // Usa o buscador para obter a lista de cursos do banco
-            this.listaDeCursos = cursoDao.findAll();
+            this.listaDeCursos = cursoController.findAll();
 
             // Pega o modelo da tabela
             DefaultTableModel model = (DefaultTableModel) tblCursos.getModel();
@@ -327,7 +329,7 @@ public class CursoListar extends javax.swing.JFrame {
 
         try {
             // Usa o buscadorNome para consultar o banco com o texto digitado
-            this.listaDeCursos = cursoDao.findByName(nomePesquisa);
+            this.listaDeCursos = cursoController.findByName(nomePesquisa);
 
             // Pega o modelo da tabela
             DefaultTableModel model = (DefaultTableModel) tblCursos.getModel();

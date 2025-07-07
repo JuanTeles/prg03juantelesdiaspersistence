@@ -17,10 +17,10 @@ import jakarta.persistence.Id;
  */
 
 
-@Entity // 1. Diz que esta classe é uma tabela
+@Entity // Diz que esta classe é uma tabela
 public class Curso extends PersistenceEntity{
 
-    @Id // 2. Define que este atributo é a chave primária
+    @Id // Define que este atributo é a chave primária
     @GeneratedValue(strategy = GenerationType.IDENTITY) // (AUTO_INCREMENT)
     private Long id;
 
