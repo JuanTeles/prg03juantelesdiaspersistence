@@ -18,9 +18,9 @@ public class PersistenceEntity {
     // identificador unico (primary key) de uma entidade
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 

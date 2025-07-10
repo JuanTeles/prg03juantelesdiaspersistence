@@ -2,6 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
+
 package br.com.ifba.infrastructure.dao;
 
 import br.com.ifba.infrastructure.entity.PersistenceEntity;
@@ -11,101 +12,115 @@ import jakarta.persistence.Persistence;
 import java.lang.reflect.ParameterizedType;
 import java.util.List;
 
-/**
- *
- * @author juant
- */
 @SuppressWarnings("unchecked")
-public class GenericDao<Entity extends PersistenceEntity> implements GenericIDao<Entity>{
+public class GenericDao<Entity extends PersistenceEntity> implements GenericIDao<Entity> {
 
-    protected static EntityManager entityManager;
-    
+    // A Factory é pesada, thread-safe e deve ser criada uma vez.
+    protected static final EntityManagerFactory entityManagerFactory;
+
     static {
-        EntityManagerFactory factory = 
-            Persistence.createEntityManagerFactory("gerenciamento-cursos");
-        entityManager = factory.createEntityManager();
+        // Bloco estático para inicializar a Factory uma única vez.
+        entityManagerFactory = Persistence.createEntityManagerFactory("gerenciamento-cursos");
     }
-    
-    @Override
-    public void save(Entity obj) {
-        try {
-            // Inicia a transação
-            entityManager.getTransaction().begin(); 
-            //Persiste o objeto no banco de dados
-            entityManager.persist(obj);        
-            // Comita a transação (confirma as alterações)
-            entityManager.getTransaction().commit(); 
-        } 
-        catch (Exception e) {
-            // Se ocorrer qualquer erro, faz o rollback da transação
-            if (entityManager != null && entityManager.getTransaction().isActive()) {
-                entityManager.getTransaction().rollback();
-            }
-            // Relança a exceção para que a camada de visão (interface) saiba que algo deu errado
-            throw new RuntimeException("Erro ao salvar o curso no banco de dados: " + e.getMessage(), e);
+
+    // Método para fechar a factory quando a aplicação for encerrada.
+    public static void shutdown() {
+        if (entityManagerFactory != null && entityManagerFactory.isOpen()) {
+            entityManagerFactory.close();
         }
     }
-    
+
+    // O EntityManager será obtido e fechado em cada método.
     @Override
-    public void update(Entity obj) {
+    public void save(Entity obj) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            // Inicia a transação
-            entityManager.getTransaction().begin(); 
-            //Persiste o objeto no banco de dados
-            entityManager.merge(obj);        
-            // Comita a transação (confirma as alterações)
+            entityManager.getTransaction().begin();
+            entityManager.persist(obj);
             entityManager.getTransaction().commit(); 
-        } 
-        catch (Exception e) {
-            // Se ocorrer qualquer erro, faz o rollback da transação
-            if (entityManager != null && entityManager.getTransaction().isActive()) {
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
             }
-            // Relança a exceção para que a camada de visão (interface) saiba que algo deu errado
-            throw new RuntimeException("Erro ao salvar o curso no banco de dados: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao salvar a entidade no banco de dados.", e);
+        } finally {
+            // ESSENCIAL: Fechar o EntityManager para liberar os recursos.
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
+    }
+
+    @Override
+    public void update(Entity obj) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try {
+            entityManager.getTransaction().begin();
+            entityManager.merge(obj);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
+                entityManager.getTransaction().rollback();
+            }
+            throw new RuntimeException("Erro ao atualizar a entidade no banco de dados.", e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
         }
     }
 
     @Override
     public void delete(Entity obj) {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            // Inicia a transação
-            entityManager.getTransaction().begin(); 
-            //Persiste o objeto no banco de dados
-            entityManager.remove(obj);        
-            // Comita a transação (confirma as alterações)
-            entityManager.getTransaction().commit(); 
-        } 
-        catch (Exception e) {
-            // Se ocorrer qualquer erro, faz o rollback da transação
-            if (entityManager != null && entityManager.getTransaction().isActive()) {
+            entityManager.getTransaction().begin();
+            if (!entityManager.contains(obj)) {
+                obj = entityManager.merge(obj);
+            }
+            entityManager.remove(obj);
+            entityManager.getTransaction().commit();
+        } catch (Exception e) {
+            if (entityManager.getTransaction().isActive()) {
                 entityManager.getTransaction().rollback();
             }
-            // Relança a exceção para que a camada de visão (interface) saiba que algo deu errado
-            throw new RuntimeException("Erro ao salvar o curso no banco de dados: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao deletar a entidade no banco de dados.", e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
         }
     }
 
     @Override
     public List<Entity> findAll() {
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
         try {
-            /* Cria a consulta usando JPQL (Java Persistence Query Language).
-            etorna a lista de dados encontrados.*/
-        return entityManager.createQuery(("from " + getTypeClass().getName())).getResultList();
-        }
-        catch (Exception e) {
-            // Em caso de erro na consulta, relança a exceção.
-            throw new RuntimeException("Erro ao buscar os cursos no banco de dados: " + e.getMessage(), e);
+            return entityManager.createQuery("FROM " + getTypeClass().getName(), (Class<Entity>) getTypeClass()).getResultList();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar as entidades no banco de dados.", e);
+        } finally {
+            if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
         }
     }
 
     @Override
     public Entity findById(Long id) {
-        return (Entity) entityManager.find(getTypeClass(), id);
+        EntityManager entityManager = entityManagerFactory.createEntityManager();
+        try {
+            return entityManager.find((Class<Entity>) getTypeClass(), id);
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar entidade por ID no banco de dados.", e);
+        } finally {
+             if (entityManager != null && entityManager.isOpen()) {
+                entityManager.close();
+            }
+        }
     }
-    
-    protected Class<?> getTypeClass () {
-        Class<?> clazz = (Class<?>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-        return clazz;
+
+    private Class<?> getTypeClass() {
+        return (Class<?>) ((ParameterizedType) this.getClass().getGenericSuperclass()).getActualTypeArguments()[0];
     }
 }

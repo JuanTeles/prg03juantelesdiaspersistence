@@ -5,10 +5,13 @@
 package br.com.ifba.curso.entity;
 
 import br.com.ifba.infrastructure.entity.PersistenceEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import java.io.Serializable;
 
 
 /**
@@ -18,15 +21,23 @@ import jakarta.persistence.Id;
 
 
 @Entity // Diz que esta classe é uma tabela
-public class Curso extends PersistenceEntity{
+@Table(name = "cursos")
+public class Curso extends PersistenceEntity implements Serializable{
 
-    @Id // Define que este atributo é a chave primária
-    @GeneratedValue(strategy = GenerationType.IDENTITY) // (AUTO_INCREMENT)
-    private Long id;
-
+    // Coluna "codigo" na tabela, não pode ser nula e deve ser única
+    @Column (name = "codigo", nullable = false, unique = true)
     private String codigo;
+    
+    // Coluna "nome" na tabela, não pode ser nula
+    @Column (name = "nome", nullable = false)
     private String nome;
+    
+    // Coluna "nome" na tabela, não pode ser nula
+    @Column (name = "carga_horaria", nullable = false)
     private int cargaHoraria;
+
+    // Coluna "ativo" na tabela, indica se o curso está ativo
+    @Column (name = "ativo")
     private boolean ativo;
     
     // O construtor padrão vazio é criado automaticamente.
